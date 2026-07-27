@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """UNAD - Ingenieria de Sistemas.
 
-//Nombres: Juan Carlos Orozco Navarro, Santiago Pachon Moreno
+//Nombres: Juan Carlos Orozco Navarro, Santiago Pachon Moreno, Andres Javier Uribe Jimenez
 //Programa: Ingenieria de Sistemas
 //Codigo fuente: Autoria Juan Carlos Orozco Navarro
 //Fecha: 2026-07-17
@@ -15,7 +15,8 @@
 
 Curso: Programacion (213023A_2203) - Fase 4 (RAC3)
 """
-
+import tkinter as tk
+from tkinter import ttk, messagebox
 import os
 import re
 import logging
@@ -80,10 +81,16 @@ class ServicioNoDisponibleError(SoftwareFJError):
 # CLASE ABSTRACTA BASE (entidades generales del sistema)
 # ===========================================================================
 class EntidadBase(ABC):
-    """Clase abstracta que representa cualquier entidad del sistema.
+    """Clase abstracta que representa cualquier entidad general del sistema de gestión.
 
-    Aporta un identificador comun y obliga a las subclases a implementar el
-    metodo describir(), lo que garantiza un comportamiento polimorfico.
+    Su propósito es servir como base para todas las entidades del programa, proporcionando
+    un identificador único común y definiendo una estructura que las clases derivadas deben
+    seguir. Al ser una clase abstracta, no puede instanciarse directamente, sino que obliga
+    a las subclases a implementar el método describir(), garantizando que cada entidad
+    proporcione su propia representación de acuerdo con sus características. Además,
+    favorece la reutilización de código, la aplicación de la herencia y el polimorfismo,
+    permitiendo que diferentes tipos de entidades compartan un comportamiento común sin
+    perder su funcionalidad específica.
     """
 
     def __init__(self, identificador):
@@ -109,10 +116,18 @@ class EntidadBase(ABC):
 # CLASE CLIENTE (validaciones robustas y encapsulacion de datos personales)
 # ===========================================================================
 class Cliente(EntidadBase):
-    """Representa a un cliente de Software FJ con sus datos personales.
-
-    Todos los datos personales se guardan como atributos privados y se validan
-    en el constructor; si algo es incorrecto se lanza ClienteInvalidoError.
+    """Representa a un cliente de la empresa Software FJ, almacenando de forma
+    segura su información personal, como el nombre, el documento de identidad
+    y el correo electrónico. Todos estos datos se encapsulan mediante atributos
+    privados y son validados desde el momento en que se crea el objeto, con el
+    fin de garantizar la integridad y consistencia de la información. Si alguno
+    de los datos ingresados no cumple las condiciones establecidas, se lanza la
+    excepción personalizada ClienteInvalidoError, evitando que se registren
+    clientes con información incorrecta dentro del sistema. Además, la clase
+    hereda de EntidadBase, por lo que comparte un identificador único e
+    implementa el método describir(), proporcionando una representación propia
+    del cliente y demostrando la aplicación de los principios de herencia,
+    encapsulación y polimorfismo de la programación orientada a objetos.
     """
 
     # Expresion regular sencilla para validar el formato del correo.
@@ -164,10 +179,17 @@ class Cliente(EntidadBase):
 # CLASE ABSTRACTA SERVICIO (base de los tres servicios especializados)
 # ===========================================================================
 class Servicio(EntidadBase):
-    """Clase abstracta que define el contrato comun de todos los servicios.
-
-    Cada servicio concreto debe implementar calcular_costo(), describir() y
-    validar_parametros(), logrando asi el polimorfismo exigido por la guia.
+    """Clase abstracta que define la estructura y el comportamiento común de todos
+    los servicios ofrecidos por Software FJ. Su función es establecer un contrato
+    que todas las clases derivadas deben cumplir, garantizando que cada servicio
+    implemente sus propios métodos para validar parámetros, calcular costos y
+    describir su información de acuerdo con sus características particulares.
+    Además, incorpora atributos compartidos, como el nombre, la tarifa base y la
+    disponibilidad del servicio, junto con funcionalidades comunes para el cálculo
+    de impuestos y descuentos. Al ser una clase abstracta, no puede instanciarse
+    directamente, sino que sirve como base para clases especializadas, promoviendo
+    la reutilización de código y la correcta aplicación de los principios de
+    abstracción, herencia y polimorfismo de la programación orientada a objetos.
     """
 
     # Impuesto por defecto (IVA 19 %) usado en el calculo de costos.
@@ -536,3 +558,153 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# ===========================================================================
+# INTERFAZ GRÁFICA DE USUARIO (GUI) - SOLUCIONADO SIN ERROR
+# ===========================================================================
+class AplicacionGUI(tk.Tk):
+    def __init__(self):
+        super().__init__()
+        self.title("Software FJ - Panel de Control Central (Fase 4)")
+        self.geometry("700x550")
+        self.resizable(False, False)
+        
+        # Gestor de datos para la interfaz
+        self.gestor_gui = GestorSoftwareFJ()
+
+        # --- MENÚ SUPERIOR DE NAVEGACIÓN (Pestañas) ---
+        self.notebook = ttk.Notebook(self)
+        self.notebook.pack(fill="both", expand=True, padx=10, pady=10)
+
+        # Crear los contenedores para cada opción del menú
+        self.tab_inicio = ttk.Frame(self.notebook)
+        self.tab_clientes = ttk.Frame(self.notebook)
+        self.tab_servicios = ttk.Frame(self.notebook)
+        self.tab_reservas = ttk.Frame(self.notebook)
+
+        # Añadir las opciones al Menú Visual
+        self.notebook.add(self.tab_inicio, text="  Inicio ")
+        self.notebook.add(self.tab_clientes, text="  Registrar Clientes ")
+        self.notebook.add(self.tab_servicios, text="  Registrar Servicios ")
+        self.notebook.add(self.tab_reservas, text="  Simulación de Consola ")
+
+        # Configurar cada sección del menú
+        self._configurar_tab_inicio()
+        self._configurar_tab_clientes()
+        self._configurar_tab_servicios()
+        self._configurar_tab_reservas()
+
+    def _configurar_tab_inicio(self):
+        """Pestaña de Bienvenida y Menú de estado"""
+        lbl_titulo = ttk.Label(self.tab_inicio, text="SISTEMA DE GESTIÓN SOFTWARE FJ", font=("Arial", 16, "bold"))
+        lbl_titulo.pack(pady=30)
+        
+        lbl_desc = ttk.Label(self.tab_inicio, text="Bienvenido al panel universitario interactivo.\nUse las pestañas superiores para navegar por el menú.", justify="center")
+        lbl_desc.pack(pady=10)
+        
+        self.lbl_contador = ttk.Label(self.tab_inicio, text="Estado: Sistema listo para operar.", font=("Arial", 10, "italic"))
+        self.lbl_contador.pack(pady=40)
+
+    def _configurar_tab_clientes(self):
+        """Formulario del menú para Clientes"""
+        frame_campos = ttk.LabelFrame(self.tab_clientes, text=" Captura de Campos en Tiempo Real ")
+        frame_campos.pack(fill="x", padx=15, pady=15, ipady=5)
+        frame_campos.columnconfigure(1, weight=1)
+
+        ttk.Label(frame_campos, text="ID de Entidad:").grid(row=0, column=0, padx=10, pady=5, sticky="w")
+        self.txt_id = ttk.Entry(frame_campos)
+        self.txt_id.grid(row=0, column=1, padx=10, pady=5, sticky="ew")
+
+        ttk.Label(frame_campos, text="Nombre del Cliente:").grid(row=1, column=0, padx=10, pady=5, sticky="w")
+        self.txt_nombre = ttk.Entry(frame_campos)
+        self.txt_nombre.grid(row=1, column=1, padx=10, pady=5, sticky="ew")
+
+        ttk.Label(frame_campos, text="Documento (6-12 números):").grid(row=2, column=0, padx=10, pady=5, sticky="w")
+        self.txt_doc = ttk.Entry(frame_campos)
+        self.txt_doc.grid(row=2, column=1, padx=10, pady=5, sticky="ew")
+
+        ttk.Label(frame_campos, text="Correo Electrónico:").grid(row=3, column=0, padx=10, pady=5, sticky="w")
+        self.txt_email = ttk.Entry(frame_campos)
+        self.txt_email.grid(row=3, column=1, padx=10, pady=5, sticky="ew")
+
+        btn_procesar = ttk.Button(self.tab_clientes, text="Validar y Guardar Cliente", command=self._procesar_campos_usuario)
+        btn_procesar.pack(pady=10)
+
+        self.txt_resultado_cliente = tk.Text(self.tab_clientes, height=6, wrap="word", bg="#f4f4f4")
+        self.txt_resultado_cliente.pack(fill="both", padx=15, pady=5, expand=True)
+
+    def _configurar_tab_servicios(self):
+        """Formulario del menú para Servicios"""
+        frame_servicios = ttk.LabelFrame(self.tab_servicios, text=" Crear Nuevo Servicio Opcional ")
+        frame_servicios.pack(fill="x", padx=15, pady=15, ipady=5)
+        frame_servicios.columnconfigure(1, weight=1)
+
+        ttk.Label(frame_servicios, text="Nombre Servicio:").grid(row=0, column=0, padx=10, pady=5, sticky="w")
+        self.txt_nom_serv = ttk.Entry(frame_servicios)
+        self.txt_nom_serv.grid(row=0, column=1, padx=10, pady=5, sticky="ew")
+
+        ttk.Label(frame_servicios, text="Tarifa Base ($):").grid(row=1, column=0, padx=10, pady=5, sticky="w")
+        self.txt_tarifa_serv = ttk.Entry(frame_servicios)
+        self.txt_tarifa_serv.grid(row=1, column=1, padx=10, pady=5, sticky="ew")
+
+        btn_crear_serv = ttk.Button(self.tab_servicios, text="Validar y Guardar Servicio", command=self._procesar_servicio_gui)
+        btn_crear_serv.pack(pady=10)
+
+        self.txt_resultado_serv = tk.Text(self.tab_servicios, height=6, wrap="word", bg="#f4f4f4")
+        self.txt_resultado_serv.pack(fill="both", padx=15, pady=5, expand=True)
+
+    def _configurar_tab_reservas(self):
+        """Sección del menú vinculada a la función main original"""
+        lbl_info = ttk.Label(self.tab_reservas, text="Simulación Automática de 18 Operaciones (Consola)", font=("Arial", 11, "bold"))
+        lbl_info.pack(pady=15)
+        
+        
+        btn_correr_sim = ttk.Button(self.tab_reservas, text=" Ejecutar Pruebas en Terminal de VS Code", command=main)
+        btn_correr_sim.pack(pady=20, ipadx=10, ipady=5)
+
+        lbl_ayuda = ttk.Label(self.tab_reservas, text="Al presionar el botón, verás todo el flujo de try/except\ncorriendo directamente en tu pantalla negra de VS Code.", justify="center")
+        lbl_ayuda.pack(pady=10)
+
+    def _procesar_campos_usuario(self):
+        self.txt_resultado_cliente.delete("1.0", tk.END)
+        try:
+            nuevo_cliente = Cliente(self.txt_id.get(), self.txt_nombre.get(), self.txt_doc.get(), self.txt_email.get())
+            self.gestor_gui.registrar_cliente(nuevo_cliente)
+            
+            res = f"¡ÉXITO EN VALIDACIÓN DE EXCEPCIONES!\nObjeto guardado en memoria:\n{nuevo_cliente.describir()}"
+            self.txt_resultado_cliente.insert(tk.END, res)
+            messagebox.showinfo("Campos Correctos", "El cliente supera las validaciones.")
+            self._actualizar_resumen_inicio()
+        except ClienteInvalidoError as error:
+            self.txt_resultado_cliente.insert(tk.END, f"ERROR CONTROLADO (ClienteInvalidoError):\n{error}")
+            messagebox.showerror("Error en Campos", str(error))
+
+    def _procesar_servicio_gui(self):
+        self.txt_resultado_serv.delete("1.0", tk.END)
+        try:
+            tarifa = float(self.txt_tarifa_serv.get() if self.txt_tarifa_serv.get() else 0)
+            nuevo_servicio = ReservaSala(99, self.txt_nom_serv.get(), tarifa, capacidad=10)
+            self.gestor_gui.registrar_servicio(nuevo_servicio)
+            
+            res = f"¡ÉXITO EN VALIDACIÓN DE SERVICIO!\nObjeto guardado en memoria:\n{nuevo_servicio.describir()}"
+            self.txt_resultado_serv.insert(tk.END, res)
+            messagebox.showinfo("Servicio Correcto", "El servicio supera las validaciones.")
+            self._actualizar_resumen_inicio()
+        except ServicioInvalidoError as error:
+            self.txt_resultado_serv.insert(tk.END, f"ERROR CONTROLADO (ServicioInvalidoError):\n{error}")
+            messagebox.showerror("Error en Servicio", str(error))
+        except ValueError:
+            messagebox.showerror("Error de Formato", "La tarifa debe ser un número válido.")
+
+    def _actualizar_resumen_inicio(self):
+        resumen = self.gestor_gui.resumen()
+        self.lbl_contador.config(text=f"Estado del Sistema en Memoria:\nClientes Creados: {resumen['clientes']} | Servicios Creados: {resumen['servicios']}")
+
+
+# ===========================================================================
+# BLOQUE DE ARRANQUE DIRECTO DE LA INTERFAZ
+# ===========================================================================
+if __name__ == "__main__":
+    print("Abriendo Panel Visual Universitario...")
+    app = AplicacionGUI()
+    app.mainloop()

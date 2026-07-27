@@ -62,9 +62,9 @@ tarea para reflejar el avance directamente en este README.
 - [OK] **T1.3** Configurar el repositorio GitHub: ramas, `README.md` y control de versiones.
 
 ### 🧑‍💻 Integrante 2 — Santiago Pachon Moreno *(Modelo de dominio - Paquete 1)*
-- [ ] **T2.1** Implementar la clase abstracta `EntidadBase` y la clase `Cliente` con validaciones y encapsulación.
-- [ ] **T2.2** Implementar la clase abstracta `Servicio` (contrato común de los servicios).
-- [ ] **T2.3** Documentar en español (comentarios y docstrings) todas las clases del paquete 1.
+- [OK] **T2.1** Implementar la clase abstracta `EntidadBase` y la clase `Cliente` con validaciones y encapsulación.
+- [OK] **T2.2** Implementar la clase abstracta `Servicio` (contrato común de los servicios).
+- [OK] **T2.3** Documentar en español (comentarios y docstrings) todas las clases del paquete 1.
 
 ### 🧑‍💻 Integrante 3 — *[Desarrollador 3]* *(Herencia y polimorfismo)*
 - [ ] **T3.1** Implementar los 3 servicios: `ReservaSala`, `AlquilerEquipo` y `AsesoriaEspecializada`.
@@ -93,9 +93,9 @@ Actualiza el **estado** y el **% de avance** de cada tarea. Estados sugeridos:
 | T1.1 | Juan Carlos Orozco | ✅ Completada | 100% |
 | T1.2 | Juan Carlos Orozco | ✅ Completada | 100% |
 | T1.3 | Juan Carlos Orozco | ✅ Completada | 100% |
-| T2.1 | Santiago Pachon Moreno | 🟨 En progreso | 0% |
-| T2.2 | Santiago Pachon Moreno | 🟨 En progreso | 0% |
-| T2.3 | Santiago Pachon Moreno | 🟨 En progreso | 0% |
+| T2.1 | Santiago Pachon Moreno | ✅ Completada| 100% |
+| T2.2 | Santiago Pachon Moreno | ✅ Completada| 100% |
+| T2.3 | Santiago Pachon Moreno | ✅ Completada | 100% |
 | T3.1 | [Juan Carlos Orozco] | ✅ Completada | 90% |
 | T3.2 | [Juan Carlos Orozco] | ✅ Completada | 90% |
 | T3.3 | [Juan Carlos Orozco] | ✅ Completada | 90% |
@@ -112,7 +112,7 @@ Actualiza el **estado** y el **% de avance** de cada tarea. Estados sugeridos:
 
 ## 📝 Bitácora de avances
 
-Registra aquí cada avance con fecha, integrante y descripción (lo más reciente arriba).
+Registrar aquí cada avance con fecha, integrante y descripción (lo más reciente arriba).
 
 | Fecha | Integrante | Avance realizado |
 |-------|------------|------------------|
@@ -120,6 +120,7 @@ Registra aquí cada avance con fecha, integrante y descripción (lo más recient
 | 2026-07-22 | Santiago Pachon Moreno | Acceso al proyecto, validación del mismo, análisis y creación de la clase abstracta EntidadBase |
 | 2026-07-22 | Juan Carlos Orozco |  Jerarquia de excepciones personalizadas segun la logica del negocio. |
 | 2026-07-23 | Juan Carlos Orozco |  Unificacion de codigo, simulacion final de operaciones. |
+| 2026-07-24 | Santiago Pachon Moreno | Detalles finalizados junto con explicación en clase abstracta EntidadBase, clase Cliente, clase abstracta Servicio |
 | _AAAA-MM-DD_ | _[nombre]_ | _[descripción del avance]_ |
 
 ---
@@ -129,7 +130,7 @@ Registra aquí cada avance con fecha, integrante y descripción (lo más recient
 Para mantener el orden y la trazabilidad del trabajo en equipo:
 
 - **Rama principal:** `main` (código estable).
-- **Ramas de trabajo:** una por integrante o por tarea, p. ej. `feature/T4.1-excepciones`.
+- **Ramas de trabajo:** una por integrante o por tarea, p. ej. `feature/integrante-v01`.
 - **Mensajes de commit** claros y en español, referenciando la tarea:
   ```
   git commit -m "T4.1: agrega jerarquia de excepciones personalizadas"
